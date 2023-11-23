@@ -3,7 +3,7 @@
   "storeEventType": "NEW",
   "book": {
     "bookId": 123,
-    "bookAuthor": "Dilip",
+    "bookAuthor": "bcallanan",
     "bookName": "Kafka Using Spring Boot"
   }
 }
