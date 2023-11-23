@@ -88,7 +88,6 @@ class StoreEventsProducerApplicationTests {
 
 	//@Test
 	public void testStoreEventsController() {
-		fail("Not yet implemented"); // TODO
 	}
 
 	@Test

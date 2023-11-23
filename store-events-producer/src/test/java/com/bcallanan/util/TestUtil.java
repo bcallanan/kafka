@@ -10,7 +10,7 @@ public class TestUtil {
 
     public static Book bookRecord(){
 
-        return new Book(123, "Dilip","Kafka Using Spring Boot" );
+        return new Book(123, "bcallanan","Kafka Using Spring Boot" );
     }
 
     public static Book bookRecordWithInvalidValues(){
@@ -42,7 +42,7 @@ public class TestUtil {
                         bookRecord());
     }
 
-    public static StoreEventDTO libraryEventRecordUpdateWithNullStoreEventId(){
+    public static StoreEventDTO storeEventRecordUpdateWithNullStoreEventId(){
 
         return
                 new StoreEventDTO(null,
@@ -50,7 +50,7 @@ public class TestUtil {
                         bookRecord());
     }
 
-    public static StoreEventDTO libraryEventRecordWithInvalidBook(){
+    public static StoreEventDTO storeEventRecordWithInvalidBook(){
 
         return
                 new StoreEventDTO(null,
