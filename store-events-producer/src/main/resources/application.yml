@@ -7,7 +7,10 @@ spring:
     activate:
       on-profile: local
   kafka:
-    # defined here te 
+    # defined here the bootstrap servers are set both for the producer 
+    # and the admin configurations
+    # {$spring.kafka.boostrap-servers}
+    # autowired configurations 
     bootstrap-servers: kaf1:9092,kaf2:9094,kaf3:9096
     topic: store-events
     template:
