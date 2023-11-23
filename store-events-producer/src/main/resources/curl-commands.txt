@@ -1,0 +1,48 @@
+POST WITH-NULL-STORE-EVENT-ID
+---------------------
+curl -i \
+-d '{"storeEventId":null,"storeEventType": "NEW","book":{"bookId":456,"bookName":"Kafka Using Spring Boot","bookAuthor":"Dilip"}}' \
+-H "Content-Type: application/json" \
+-X POST http://localhost:8080/v1/storeevent
+
+PUT WITH ID - 1
+--------------
+curl -i \
+-d '{"storeEventId":1,"storeEventType": "UPDATE","book":{"bookId":456,"bookName":"Kafka Using Spring Boot 2.X","bookAuthor":"Dilip"}}' \
+-H "Content-Type: application/json" \
+-X PUT http://localhost:8080/v1/storeevent
+
+curl -i \
+-d '{"storeEventId":2,"storeEventType": "UPDATE","book":{"bookId":456,"bookName":"Kafka Using Spring Boot 2.X","bookAuthor":"Dilip"}}' \
+-H "Content-Type: application/json" \
+-X PUT http://localhost:8080/v1/storeevent
+
+
+
+PUT WITH ID
+---------------------
+curl -i \
+-d '{"storeEventId":123,"storeEventType": "UPDATE","book":{"bookId":456,"bookName":"Kafka Using Spring Boot","bookAuthor":"Dilip"}}' \
+-H "Content-Type: application/json" \
+-X PUT http://localhost:8080/v1/storeevent
+
+curl -i \
+-d '{"storeEventId":999,"storeEventType": "UPDATE","book":{"bookId":456,"bookName":"Kafka Using Spring Boot","bookAuthor":"Dilip"}}' \
+-H "Content-Type: application/json" \
+-X PUT http://localhost:8080/v1/storeevent
+
+curl -i \
+-d '{"storeEventId":2,"storeEventType": "UPDATE","book":{"bookId":456,"bookName":"Kafka Using Spring Boot","bookAuthor":"Dilip"}}' \
+-H "Content-Type: application/json" \
+-X PUT http://localhost:8080/v1/storeevent
+
+
+PUT WITHOUT ID
+---------------------
+curl -i \
+-d '{"storeEventId":null,"storeEventType": "UPDATE","book":{"bookId":456,"bookName":"Kafka Using Spring Boot","bookAuthor":"Dilip"}}' \
+-H "Content-Type: application/json" \
+-X PUT http://localhost:8080/v1/storeevent
+
+
+./kafka-topics.sh --create --topic store-events.DLT --replication-factor 1 --partitions 4 --bootstrap-server localhost:9092

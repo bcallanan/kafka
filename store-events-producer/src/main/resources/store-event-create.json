@@ -1,0 +1,9 @@
+{
+  "storeEventId": null,
+  "storeEventType": "NEW",
+  "book": {
+    "bookId": 123,
+    "bookAuthor": "Dilip",
+    "bookName": "Kafka Using Spring Boot"
+  }
+}
