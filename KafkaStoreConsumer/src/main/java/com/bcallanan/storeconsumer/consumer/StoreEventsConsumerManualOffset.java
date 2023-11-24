@@ -1,49 +1,46 @@
 package com.bcallanan.storeconsumer.consumer;
 
-import java.lang.annotation.Annotation;
-
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.config.KafkaListenerContainerFactory;
+import org.springframework.kafka.listener.AcknowledgingMessageListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
-
-import com.bcallanan.storeconsumer.service.StoreEventsService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Component
+//@Component
 @Slf4j
-class StoreEventsConsumer {
+class StoreEventsConsumerManualOffset implements AcknowledgingMessageListener<Integer, String>{
 
 	@Value("${spring.kafka.topic}")
 	public String topic;
 
-	@Autowired
-	private StoreEventsService storeEventsService;
 	
 	/**
 	 * This method annotates and autowires the KafkaListener. This is instrumental to receiving
 	 * consumable kafka messages from the KafkaListenerContainerFactory. The container factory is
-	 * set appropriately by default.
+	 * set appropriately by default. This is a manual offset listener to manually acknowledge the
+	 * consumer record.
 	 *   
 	 * We are also using the KafkaConsumerFactory -> DefaultKafkaConsumerFactory
 	 * 
 	 * The @KafkaListener Annotation uses the ConcurrentMessageListenerContainer behind the scenes
 	 *   
 	 * @param consumerRecord
-	 * @throws JsonProcessingException 
-	 * @throws JsonMappingException 
 	 * 
 	 */
+	@Override
 	@KafkaListener( topics = { "${spring.kafka.topic}" })//, containerFactory = "KafkaListenerContainerFactory")
-	public void onMessages( ConsumerRecord<Integer, String> consumerRecord) throws JsonMappingException, JsonProcessingException {
-		
+	public void onMessage(ConsumerRecord<Integer, String> consumerRecord, Acknowledgment acknowledgment) {
+		// TODO Auto-generated method stub
 		log.info( "ConsumerRecord: {}", consumerRecord);
-		storeEventsService.processStoreEvent( consumerRecord );
-		
+
+		// here we would potentially do some other critical configurations, otherwise the offset would have moved forward
+		// prematurely before we made it thru the critical steps. 
+
+		// Manually call the acknowledgement
+		acknowledgment.acknowledge();
+		log.info( "acknowledged consumerRecord: {}", consumerRecord);
 	}
 }

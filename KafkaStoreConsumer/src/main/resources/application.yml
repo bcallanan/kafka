@@ -2,6 +2,8 @@ spring:
   profiles:
     active: local
 server:
+  # this can be overridden on the command line with
+  # java -jar -Dserver.port=808# target/kafkaStoreConsumer-0.0.1-SNAPSHOT.jar
   port: 8085
 ---
 spring:
@@ -13,10 +15,27 @@ spring:
     # autowired configurations 
     bootstrap-servers: kaf1:9092,kaf2:9094,kaf3:9096
     topic: store-events
+    listenerConcurrency: 3
+
     template:
       default-topic: store-events
+
     consumer:
       key-serializer: org.apache.kafka.common.serialization.IntegerDeserializer
       value-serializer: org.apache.kafka.common.serialization.StringDeserializer
       group-id: store-events-listener-group
+
+    datasource:
+      url: jdbc:h2:mem:kafkabd
+      driver-class-name: org.h2.Driver
+
+    jpa:
+      database: h2
+      database-platform: org.hibernate.dialect.H2Dialect
+      generate-ddl: true
+
+    h2:
+      console:
+        enabled: true
+      
 ---
