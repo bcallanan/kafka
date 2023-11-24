@@ -2,6 +2,7 @@ package com.bcallanan.storeproducer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +14,7 @@ import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -63,8 +64,6 @@ class StoreEventsProducerApplicationTests {
 	
 	@BeforeEach
 	public void setUp() throws Exception {
-		
-		
 		
 		Map<String, Object> configProps = new HashMap<> (KafkaTestUtils.
 				consumerProps( "group1", "true", embeddedKafkaBroker));

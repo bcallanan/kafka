@@ -18,6 +18,9 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        retries: 10
+        acks: 1
     admin:
       autoCreate: true
 

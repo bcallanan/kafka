@@ -1,19 +1,26 @@
+/**
+ * 
+ */
 package com.bcallanan.storeproducer;
 
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
-//import org.junit.jupiter.api.Test;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.bcallanan.storeproducer.controller.StoreEventsController;
@@ -22,23 +29,16 @@ import com.bcallanan.storeproducer.producer.StoreEventsProducer;
 import com.bcallanan.util.TestUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
 /**
- * This is a unit test case. Here we dont need the whole spring application
- * to accomplish what the goal is. So, no SpringBootTest annotation!
- * Instead we'll be performing a 'test slice'
  * 
- * With WebMvcTest we'll get a autowired instance of MockMvc.
- * 	   With MockMvc we can test the endpoints within the StoreEventsController
  */
-@WebMvcTest//( StoreEventsController.class)
-public class StoreEventsControllerUnitTest {
+@WebMvcTest( StoreEventsController.class)
+class ControllerUnitTest {
 
 	// It would seem that the objectmapper is not being autowire properly
 	// lets investigate this further at a later time
-	//@Autowired
-	//ObjectMapper objectMapper;
-    ObjectMapper objectMapper = new ObjectMapper();
+	@Autowired
+    ObjectMapper objectMapper;
 
 	@Autowired
 	private Jackson2ObjectMapperBuilder mapperBuilder;
@@ -48,46 +48,61 @@ public class StoreEventsControllerUnitTest {
 	
 	@MockBean
 	StoreEventsProducer storeEventsProducer;
-	
-//	@Before
-//	public void setUp() throws Exception {
-//	}
-//
-//	@After
-//	public void tearDown() throws Exception {
-//	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@BeforeAll
+	static void setUpBeforeClass() throws Exception {
+	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@AfterAll
+	static void tearDownAfterClass() throws Exception {
+	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@BeforeEach
+	void setUp() throws Exception {
+	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@AfterEach
+	void tearDown() throws Exception {
+	}
 
 	/**
 	 * Unit Test of /v1/storeEvent
 	 * @throws Exception 
 	 */
 	@Test
-	public void testInvalidPostStoreEvent() throws Exception {
+	public void testInvalidPostStoreEventWith4XXStatus() throws Exception {
 		
 		String jsonDTOString = null;
 		
-		if ( objectMapper != null ) {
-			System.out.println( "What changed to fix this. Object Mapper is not null and autowired worked");
-			 jsonDTOString = objectMapper.writeValueAsString( TestUtil.storeEventRecordWithInvalidBook() );
-		}
-		else {
-			System.out.println( "Object Mapper is null and autowired is not working");
-			jsonDTOString = mapperBuilder.build().writeValueAsString( TestUtil.storeEventRecordWithInvalidBook() );
-		}
+		jsonDTOString = objectMapper.writeValueAsString( TestUtil.storeEventRecordWithInvalidBook() );
 		
-		
-//		// Set up a mock implementation with a unit test w/o kafka broker
-//		when( storeEventsProducer.sendStoreEventProducerRecord( isA( StoreEventDTO.class )))
-//				.thenReturn( null );
+		// Set up a mock implementation with a unit test w/o kafka broker
+		when( storeEventsProducer.sendStoreEventProducerRecord( isA( StoreEventDTO.class )))
+				.thenReturn( null );
 			
+		String expectedErrorMessage = "book.bookId - must not be null,book.bookName - must not be blank";
+		
 		mockMvc.perform(
 				MockMvcRequestBuilders.post( "/v1/storeEvent")
 				.content( jsonDTOString )
 				.contentType(  MediaType.APPLICATION_JSON ))
-				.andExpect( status().isCreated());
-
+				.andExpect( status().is4xxClientError())
+				.andExpect( content().string( expectedErrorMessage));
 	}
-	
+
+
 	/**
 	 * Unit Test of /v1/storeEvent
 	 * @throws Exception 
@@ -97,26 +112,16 @@ public class StoreEventsControllerUnitTest {
 		
 		String jsonDTOString = null;
 		
-		if ( objectMapper != null ) {
-			System.out.println( "What changed to fix this. Object Mapper is not null and autowired worked");
-			 jsonDTOString = objectMapper.writeValueAsString( TestUtil.storeEventRecord() );
-		}
-		else {
-			System.out.println( "Object Mapper is null and autowired is not working");
-			jsonDTOString = mapperBuilder.build().writeValueAsString( TestUtil.storeEventRecord() );
-		}
-		
+		jsonDTOString = objectMapper.writeValueAsString( TestUtil.storeEventRecord() );
 		
 		// Set up a mock implementation with a unit test w/o kafka broker
 		when( storeEventsProducer.sendStoreEventProducerRecord( isA( StoreEventDTO.class )))
 				.thenReturn( null );
 			
-		mockMvc.perform(
+		this.mockMvc.perform(
 				MockMvcRequestBuilders.post( "/v1/storeEvent")
 				.content( jsonDTOString )
 				.contentType(  MediaType.APPLICATION_JSON ))
 				.andExpect( status().isCreated());
-				
 	}
-
 }
