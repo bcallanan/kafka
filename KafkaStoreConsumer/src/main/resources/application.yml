@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: local
+server:
+  port: 8085
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  kafka:
+    # {$spring.kafka.boostrap-servers}
+    # autowired configurations 
+    bootstrap-servers: kaf1:9092,kaf2:9094,kaf3:9096
+    topic: store-events
+    template:
+      default-topic: store-events
+    consumer:
+      key-serializer: org.apache.kafka.common.serialization.IntegerDeserializer
+      value-serializer: org.apache.kafka.common.serialization.StringDeserializer
+      group-id: store-events-listener-group
+---
