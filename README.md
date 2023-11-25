@@ -9,10 +9,12 @@ Access the h2 database in the following link - http://localhost:8081/h2-console
 JDBC Address: jdbc:h2:mem:kafkabd
 
 Consumer Event recover options for this repository. All of these recoveries options are scenarios where there
-is an actual recovery reason to retry the consumption again. The behavior is controller auto configuration with application.yml -> by spring.kafka.republishRetries: true|false
+is an actual recovery reason to retry the consumption again.
 
-False - Stores the recoverable uses in the DB.
-True - Republishes back into kafka with the newly update topics
+The behavior is controller auto configuration with application.yml -> by spring.kafka.republishRetries: true|false
+
+   - False - Stores the recoverable uses in the DB.
+   - True - Republishes back into kafka with the newly update topics
 
 1) When a recoverable failure occurs because of runtime exception. It would be possible to re-tag the message's topic and update the kafka message 'store-events.RETRY'.
 
