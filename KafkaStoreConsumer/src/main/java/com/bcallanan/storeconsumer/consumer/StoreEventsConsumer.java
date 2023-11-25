@@ -1,12 +1,9 @@
 package com.bcallanan.storeconsumer.consumer;
 
-import java.lang.annotation.Annotation;
-
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.stereotype.Component;
 
 import com.bcallanan.storeconsumer.service.StoreEventsService;
@@ -17,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
-class StoreEventsConsumer {
+public class StoreEventsConsumer {
 
 	@Value("${spring.kafka.topic}")
 	public String topic;

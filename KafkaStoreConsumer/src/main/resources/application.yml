@@ -17,6 +17,10 @@ spring:
     topic: store-events
     listenerConcurrency: 3
 
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
     template:
       default-topic: store-events
 

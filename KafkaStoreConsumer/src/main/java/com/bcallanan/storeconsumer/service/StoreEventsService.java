@@ -4,9 +4,11 @@ import java.util.Optional;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.bcallanan.storeconsumer.entity.StoreEvent;
+import com.bcallanan.storeconsumer.entity.StoreEventEnumType;
 import com.bcallanan.storeconsumer.jpa.StoreEventsRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -29,6 +31,11 @@ public class StoreEventsService {
 		StoreEvent storeEvent = objectMapper.readValue( consumerRecord.value(), StoreEvent.class);
 		
 		log.info( "Store Event entiry object {}", storeEvent);
+		
+		// used mainly in mcoking out the intgration test with a customized exception on a special instance
+		if ( storeEvent != null && ! storeEvent.getStoreEventEnumType().equals( StoreEventEnumType.NEW) && storeEvent.getStoreEventId() == 999 ) {
+			throw new RecoverableDataAccessException("Temporary exception case" );
+		}
 		
 		switch ( storeEvent.getStoreEventEnumType()) {
 			case NEW:
