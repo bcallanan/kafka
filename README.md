@@ -11,7 +11,7 @@ JDBC Address: jdbc:h2:mem:kafkabd
 Consumer Event recover options for this repository. All of these recoveries options are scenarios where there
 is an actual recovery reason to retry the consumption again.
 
-The behavior is controller auto configuration with application.yml -> by spring.kafka.republishRetries: true|false
+The behavior is controlled auto configuration with application.yml -> by spring.kafka.republishRetries: true|false
 
    - False - Stores the recoverable uses in the DB. (options 2 & 4)
    - True - Republishes back into kafka with the newly update topics (options 1 & 3)
