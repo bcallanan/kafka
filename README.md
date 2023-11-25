@@ -13,8 +13,8 @@ is an actual recovery reason to retry the consumption again.
 
 The behavior is controller auto configuration with application.yml -> by spring.kafka.republishRetries: true|false
 
-   - False - Stores the recoverable uses in the DB.
-   - True - Republishes back into kafka with the newly update topics
+   - False - Stores the recoverable uses in the DB. (options 2 & 4)
+   - True - Republishes back into kafka with the newly update topics (options 1 & 3)
 
 1) When a recoverable failure occurs because of runtime exception. It would be possible to re-tag the message's topic and update the kafka message 'store-events.RETRY'.
 
