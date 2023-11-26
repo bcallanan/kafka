@@ -11,6 +11,11 @@ JDBC Address: jdbc:h2:mem:kafkabd
 Consumer Event recover options for this repository. All of these recoveries options are scenarios where there
 is an actual recovery reason to retry the consumption again.
 
+The behavior is controlled auto configuration with application.yml -> by spring.kafka.republishRetries: true|false
+
+   - False - Stores the recoverable uses in the DB. (options 2 & 4)
+   - True - Republishes back into kafka with the newly update topics (options 1 & 3)
+
 1) When a recoverable failure occurs because of runtime exception. It would be possible to re-tag the message's topic and update the kafka message 'store-events.RETRY'.
 
    The caveat is avoiding an infinite loop on the recovery while the rutime exception continues.
