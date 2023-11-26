@@ -33,7 +33,10 @@ public class StoreEventsService {
 		log.info( "Store Event entiry object {}", storeEvent);
 		
 		// used mainly in mcoking out the intgration test with a customized exception on a special instance
-		if ( storeEvent != null && ! storeEvent.getStoreEventEnumType().equals( StoreEventEnumType.NEW) && storeEvent.getStoreEventId() == 999 ) {
+		if ( storeEvent != null && 
+				! storeEvent.getStoreEventEnumType().equals( StoreEventEnumType.NEW) &&
+				storeEvent.getStoreEventId() != null && // with a 'new' message event enum type it will be null
+				storeEvent.getStoreEventId() == 999 ) {
 			throw new RecoverableDataAccessException("Temporary exception case" );
 		}
 		

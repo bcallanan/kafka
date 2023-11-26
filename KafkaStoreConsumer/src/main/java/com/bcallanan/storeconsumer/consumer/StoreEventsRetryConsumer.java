@@ -14,10 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
-public class StoreEventsConsumer {
+public class StoreEventsRetryConsumer {
 
-	@Value("${spring.kafka.topic}")
-	public String topic;
+	@Value("${spring.kafka.topics.retry}")
+	public String retryTopic;
 
 	@Autowired
 	private StoreEventsService storeEventsService;
@@ -30,17 +30,24 @@ public class StoreEventsConsumer {
 	 * We are also using the KafkaConsumerFactory -> DefaultKafkaConsumerFactory
 	 * 
 	 * The @KafkaListener Annotation uses the ConcurrentMessageListenerContainer behind the scenes
+	 * 
+	 * A corner case exists on having multiple consumer classes operating on the same messge
 	 *   
 	 * @param consumerRecord
 	 * @throws JsonProcessingException 
 	 * @throws JsonMappingException 
 	 * 
 	 */
-	@KafkaListener( topics = { "${spring.kafka.topic}" },
-		groupId = "${spring.kafka.consumer.group-id}")//, containerFactory = "KafkaListenerContainerFactory")
+	@KafkaListener( topics = { "${spring.kafka.topics.retry}" },
+			autoStartup = "{$retryListener.startup:true}",
+			groupId = "${spring.kafka.consumer.retry-group-id}")//, containerFactory = "KafkaListenerContainerFactory")
 	public void onMessages( ConsumerRecord<Integer, String> consumerRecord) throws JsonMappingException, JsonProcessingException {
 		
-		log.info( "ConsumerRecord: {}", consumerRecord);
+		log.info( "StoreEventsRetryConsumer Retry ConsumerRecord: {}", consumerRecord);
+		consumerRecord.headers()
+			.forEach( (header) -> {
+				log.info( "Key: {}, Value: {}", header.key(), new String( header.value()));
+			});
 		storeEventsService.processStoreEvent( consumerRecord );
 		
 	}

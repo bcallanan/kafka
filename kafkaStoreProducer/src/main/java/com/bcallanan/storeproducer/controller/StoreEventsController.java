@@ -18,6 +18,20 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
+
+/**
+ * Additional failure scenarios to consider
+ * 
+ * 1) KafkaCluster is not available
+ * 2) if Acks=all & some brokers are not available
+ * 3) min.insync.replicas config - data delivery
+ * 		ex. min.insync.replicas=2, but only one broker is available,
+ * 			then the message will fail to be processed.
+ * 		error = not enough replicas
+ * 		
+ * 		kafka-topics --boot-server kaf1:9092 --entity-type topics --entity-name store-events \
+ * 		--alter --add-config min.insync.replicas
+ */
 @RestController
 @Slf4j
 public class StoreEventsController {

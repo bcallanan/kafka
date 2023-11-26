@@ -30,7 +30,7 @@ import com.bcallanan.util.TestUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * 
+ * The is a test slice unit test for the StoreEventsController
  */
 @WebMvcTest( StoreEventsController.class)
 class ControllerUnitTest {
@@ -78,7 +78,7 @@ class ControllerUnitTest {
 	}
 
 	/**
-	 * Unit Test of /v1/storeEvent
+	 * Invalid Unit Test of /v1/storeEvent
 	 * @throws Exception 
 	 */
 	@Test

@@ -14,15 +14,21 @@ public class AutoCreateConfig {
 	@Value("${spring.kafka.topic}")
 	public String topic;
 	
+	@Value("${spring.kafka.producer.partitions}")
+	public Integer partitions;
+
+	@Value("${spring.kafka.producer.replicas}")
+	public Integer replicas;
+
 	@Value("${spring.kafka.admin.autoCreate}")
 	public Boolean isAutoCreateTopicEnabled;
-	
+
 	@Bean
 	public NewTopic storeEvents() {
 		return TopicBuilder
 				.name( topic )
-				.partitions( 3 )
-				.replicas( 3 )
+				.partitions( partitions )
+				.replicas( replicas )
 				.build();
 	}
 	

@@ -99,17 +99,21 @@ class StoreEventsProducerApplicationTests {
 	@Test
 	public void testPostStoreEvent() {
 		
+		//given
 		HttpHeaders headers = new HttpHeaders();
 		headers.set( "content-type", MediaType.APPLICATION_JSON.toString());
 		
 		HttpEntity<StoreEventDTO> httpEntity = 
 				new HttpEntity<>( TestUtil.storeEventRecord(), headers);
 		
+		//when
 		ResponseEntity<StoreEventDTO> responseEntity = testRestTemplate
 			.exchange( "/v1/storeEvent", HttpMethod.POST, httpEntity, StoreEventDTO.class );
 
+		// then
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 		
+		// blocking call
 		ConsumerRecords< Integer, String> consumerRecords = KafkaTestUtils.getRecords( consumer );
 		
 		assert consumerRecords.count() == 1;
@@ -118,7 +122,7 @@ class StoreEventsProducerApplicationTests {
 		// this is because the record class handles the 'hash', 'equals', and toString api's for you. That's the nice thing
 		// about the record class. No additional impls
 		consumerRecords.forEach( record -> {
-			var storeEventDTOActual = TestUtil.parseStoreEventRecord( objectMapper, record.value() );
+			StoreEventDTO storeEventDTOActual = TestUtil.parseStoreEventRecord( objectMapper, record.value() );
 			
 			System.out.println( "StoreEventDTOActual: " + storeEventDTOActual);
 			
@@ -126,4 +130,44 @@ class StoreEventsProducerApplicationTests {
 			assertEquals( storeEventDTOActual, TestUtil.storeEventRecord());
 		});
 	}
+	
+	/**
+	 * Consume the record from the EmbeddedKafkaBroker then 
+	 * Assert that the DTO Record being used is the same as what was sent
+	 */
+	@Test
+	public void testUpdateStoreEvent() {
+		
+		//given
+		HttpHeaders headers = new HttpHeaders();
+		headers.set( "content-type", MediaType.APPLICATION_JSON.toString());
+		
+		HttpEntity<StoreEventDTO> httpEntity = 
+				new HttpEntity<>( TestUtil.storeEventRecord(), headers);
+		
+		//when
+		ResponseEntity<StoreEventDTO> responseEntity = testRestTemplate
+			.exchange( "/v1/storeEvent", HttpMethod.POST, httpEntity, StoreEventDTO.class );
+
+		// then
+		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+		
+		// blocking call
+		ConsumerRecords< Integer, String> consumerRecords = KafkaTestUtils.getRecords( consumer );
+		
+		//assert consumerRecords.count() == 1;
+		
+		// Here because the storeEventDTOActual is a 'record' class the record class does all the work for you
+		// this is because the record class handles the 'hash', 'equals', and toString api's for you. That's the nice thing
+		// about the record class. No additional impls
+		consumerRecords.forEach( record -> {
+			StoreEventDTO storeEventDTOActual = TestUtil.parseStoreEventRecord( objectMapper, record.value() );
+			
+			System.out.println( "StoreEventDTOActual: " + storeEventDTOActual);
+			
+			// this is a toString use of the record class
+			assertEquals( storeEventDTOActual, TestUtil.storeEventRecord());
+		});
+	}
+
 }

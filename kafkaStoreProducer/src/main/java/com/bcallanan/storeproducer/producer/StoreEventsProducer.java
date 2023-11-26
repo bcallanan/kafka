@@ -48,6 +48,8 @@ public class StoreEventsProducer {
 		CompletableFuture<SendResult<Integer, String>> completableFuture = 
 				kafkaTemplate.send( topic, key, value );
 		
+		// org.apache.j=kafka.common.errors.TimeoutException: Topic store-events not present in metadata after <timeout-value>
+
 		return completableFuture.whenComplete((sendResult, throwable ) -> {
 			
 			if ( throwable != null ) {
@@ -73,10 +75,16 @@ public class StoreEventsProducer {
 		String value = objectMapper.writeValueAsString( storeEventDTO);
 		
 		var producerRecord = buildProducerRecord( key, value );
-		// 1) Blocking call - get metadata about the kafka cluster
+		// 1) Blocking call - get metadata about the kafka cluster -- controlled by time out value max.block.ms = 60 sec
 		//    if fails go into the failure scenario
 		//    else it succeeds
+		
+		// org.apache.j=kafka.common.errors.TimeoutException: Topic store-events not present in metadata after <timeout-value>
+		
+		
 		// 2) Sends message happens and returns completable Future
+		            //see retries config value
+					// there's also a backoff value 
 		CompletableFuture<SendResult<Integer, String>> completableFuture = 
 				kafkaTemplate.send( producerRecord );
 		
@@ -131,6 +139,8 @@ public class StoreEventsProducer {
 				.get( 3, TimeUnit.SECONDS); //<---------- cause a wait
 				//.get(); add a time out instead
 		
+		// org.apache.j=kafka.common.errors.TimeoutException: Topic store-events not present in metadata after <timeout-value>
+
 		handleSuccess( key, value, result);
 		
 		return result;
