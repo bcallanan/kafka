@@ -23,6 +23,16 @@ spring:
       properties:
         retries: 10
         acks: 1
+        security:
+          protocol: SSL
+        ssl.endpoint.identification.algorith:
+
+    ssl:
+      trust-store-location: file:../sslTools/secrets/kafka.producer.truststore.jks
+      trust-store-password: confluentxx
+      key-store-location: file:../sslTools/secrets/kafka.producer.keystore.jks
+      key-store-password: confluentxx
+    
     admin:
       autoCreate: true
 

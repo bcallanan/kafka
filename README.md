@@ -22,6 +22,6 @@ The behavior is controlled auto configuration with application.yml -> by spring.
 
 1) When a recoverable failure occurs because of runtime exception. It would be possible to persist the message into the DB and process the message when the runtime exception is corrected. The build a scaler that will take the retry records and reprocess them back into the consumer process. Basically polling the message queue at a regular interval for failed records and reprocess them by redirecting the storeEventsConsumer service logic.
 
-1) Discard the message - 'Re-Publish' the failed record into a deadletter topic for tracking purposes. Same as previously metioned. Push the update back into kafka with an updated topic: 'store-events.DEADLETTER'
+1) Discard the message - 'Re-Publish' the failed record into a deadletter topic for tracking purposes. Same as previously mentioned. Push the update back into kafka with an updated topic: 'store-events.DEADLETTER'
 
 1) Save the failed record into the DB for tracking purposes only and move on...

@@ -45,4 +45,4 @@ curl -i \
 -X PUT http://localhost:8080/v1/storeevent
 
 
-./kafka-topics.sh --create --topic store-events.DLT --replication-factor 1 --partitions 4 --bootstrap-server localhost:9092
+./kafka-topics.sh --create --topic store-events.DLT --replication-factor 2 --partitions 3 --bootstrap-server localhost:9092
